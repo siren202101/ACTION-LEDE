@@ -69,7 +69,22 @@ jobs:
 
     - name: Install feeds
       #run: cd openwrt &&  ./scripts/feeds install -a
-      run: cd openwrt && rm -rf feeds/small/{base-files,dnsmasq,firewall*,fullconenat,libnftnl,nftables,ppp,opkg,ucl,upx,vsftpd*,miniupnpd-iptables,wireless-regdb} &&  ./scripts/feeds install -a
+      run: |
+        cd openwrt && rm -rf feeds/small/{base-files,dnsmasq,firewall*,fullconenat,libnftnl,nftables,ppp,opkg,ucl,upx,vsftpd*,miniupnpd-iptables,wireless-regdb} &&  ./scripts/feeds install -a
+        # 删除不需要的目录
+        rm -rf package/feeds/small/miniupnpd-iptables
+        rm -rf package/feeds/luci/luci-app-openclash
+        rm -rf package/feeds/luci/luci-app-passwall
+        rm -rf package/feeds/luci/luci-app-dockerman
+        rm -rf package/feeds/luci/luci-app-smartdns
+        rm -rf package/feeds/packages/smartdns
+
+        # 添加软链接（相对路径）
+        ln -s ../../../feeds/small/luci-app-passwall package/feeds/small/luci-app-passwall
+        ln -s ../../../feeds/small/luci-app-openclash package/feeds/small/luci-app-openclash
+        ln -s ../../../feeds/small/luci-app-dockerman package/feeds/small/luci-app-dockerman
+        ln -s ../../../feeds/small/luci-app-smartdns package/feeds/small/luci-app-smartdns
+        ln -s ../../../feeds/small/smartdns package/feeds/small/smartdns
 
     - name: Load custom configuration
       run: |
